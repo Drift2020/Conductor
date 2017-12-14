@@ -16,7 +16,10 @@ namespace Conductor
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Form1());
+
+            Form1 Global_form = new Form1();
+            P_Global P_Form = new P_Global(Global_form);
+            Application.Run(Global_form);
         }
     }
 }

@@ -35,26 +35,21 @@ namespace Conductor
             InitializeComponent();
             Start_program?.Invoke(this, EventArgs.Empty);
 
-
             TreeNode node;
 
-
-            string[] astrLogicalDrives = System.IO.Directory.GetLogicalDrives(); // System.Environment.GetLogicalDrives();
-           
-          //  foreach (string disk in astrLogicalDrives)
-            //    node = treeViewPath1.Nodes.Add(disk);
-          
-            for (int x = 0; x < 3; ++x)
-            {
-                // Добавляем корневой узел
-                node = treeViewPath1.Nodes.Add(String.Format("Node{0}", x * 4));
-                for (int y = 1; y < 4; ++y)
-                {
-                    // Добавляем дочерние узлы 
-                    node = node.Nodes.Add(String.Format("Node{0}", x * 4 + y));
-                }
-            }
-
+           // string[] astrLogicalDrives = System.IO.Directory.GetLogicalDrives(); // System.Environment.GetLogicalDrives();          
+            foreach (string disk in name_Notee_List)
+                node = treeViewPath1.Nodes.Add(disk);
+            //for (int x = 0; x < 3; ++x)
+            //{
+            //    // Добавляем корневой узел
+            //    node = treeViewPath1.Nodes.Add(String.Format("Node{0}", x * 4));
+            //    for (int y = 1; y < 4; ++y)
+            //    {
+            //        // Добавляем дочерние узлы 
+            //        node = node.Nodes.Add(String.Format("Node{0}", x * 4 + y));
+            //    }
+            //}
         }
         #region Button
         private void таблицыToolStripMenuItem_Click(object sender, EventArgs e)
@@ -97,12 +92,7 @@ namespace Conductor
 
         }
         #endregion Button
-        
-
-       
-
-        
-
+                     
         private void treeViewPath1_BeforeExpand(object sender, TreeViewCancelEventArgs e)
         {
             Name_Note = e.Node.Name;

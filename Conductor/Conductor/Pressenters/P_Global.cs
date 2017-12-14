@@ -55,6 +55,13 @@ namespace Conductor
         public void Start_program(object sender, EventArgs e)
         {
 
+
+            string[] astrLogicalDrives = System.IO.Directory.GetLogicalDrives(); // System.Environment.GetLogicalDrives();     
+            foreach (string disk in astrLogicalDrives)
+                _viwe.Name_Notee_List.Add(disk);
+
+            ////  foreach (string disk in astrLogicalDrives)
+            ////    node = treeViewPath1.Nodes.Add(disk);        
         }
         public void Renewal(object sender, EventArgs e)
         {
