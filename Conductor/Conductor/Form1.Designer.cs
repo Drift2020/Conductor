@@ -55,7 +55,9 @@
             this.treeViewPath1.Name = "treeViewPath1";
             this.treeViewPath1.Size = new System.Drawing.Size(218, 496);
             this.treeViewPath1.TabIndex = 0;
+            this.treeViewPath1.AfterCollapse += new System.Windows.Forms.TreeViewEventHandler(this.treeViewPath1_AfterCollapse);
             this.treeViewPath1.BeforeExpand += new System.Windows.Forms.TreeViewCancelEventHandler(this.treeViewPath1_BeforeExpand);
+            this.treeViewPath1.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treeViewPath1_AfterSelect);
             // 
             // toolStrip1
             // 
@@ -193,6 +195,7 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Form1";
             this.Text = "Проводник";
+            this.Load += new System.EventHandler(this.Form1_Load);
             this.toolStrip1.ResumeLayout(false);
             this.toolStrip1.PerformLayout();
             this.ResumeLayout(false);

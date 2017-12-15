@@ -10,6 +10,7 @@ using System.Windows.Forms;
 
 namespace Conductor
 {
+    
     public partial class Form1 : Form,I_Global
     {
         public event EventHandler<EventArgs> Close_Program;
@@ -22,24 +23,42 @@ namespace Conductor
         public event EventHandler<EventArgs> Start_program;
         public event EventHandler<EventArgs> Renewal;
         #region Pole
+
+        // 1 element , 2 name, 3 full path, 4 elements element's, 5 name, 6 full path
+
+
+        List<int> name_Notee_element_List = new List<int>();
         List<string> full_Path_Note_List = new List<string>();
         List<string> name_Notee_List = new List<string>();
+
+
         public string Name_Note { set; get; }
         public string Full_Path_Note { set; get; }
+
         public List<string> Full_Path_Note_List { set { full_Path_Note_List = value; } get { return full_Path_Note_List; } }
         public List<string> Name_Notee_List { set { name_Notee_List = value; } get { return name_Notee_List; } }
-        #endregion Pole
+        public List<int> Name_Notee_element_List { set { name_Notee_element_List = value; } get { return name_Notee_element_List; } }
 
-        public Form1()
+        #endregion Pole
+        private void Form1_Load(object sender, EventArgs e)
         {
-            InitializeComponent();
             Start_program?.Invoke(this, EventArgs.Empty);
 
             TreeNode node;
 
-           // string[] astrLogicalDrives = System.IO.Directory.GetLogicalDrives(); // System.Environment.GetLogicalDrives();          
-            foreach (string disk in name_Notee_List)
-                node = treeViewPath1.Nodes.Add(disk);
+            // string[] astrLogicalDrives = System.IO.Directory.GetLogicalDrives(); // System.Environment.GetLogicalDrives();          
+            for (int disk = 0; disk < name_Notee_List.Count; disk++)
+            {
+                node = treeViewPath1.Nodes.Add(name_Notee_List[disk]);
+
+                if (name_Notee_element_List[disk] > 0)
+                    node.Nodes.Add("1");
+            }
+        }
+        public Form1()
+        {
+            InitializeComponent();
+            
             //for (int x = 0; x < 3; ++x)
             //{
             //    // Добавляем корневой узел
@@ -51,6 +70,7 @@ namespace Conductor
             //    }
             //}
         }
+
         #region Button
         private void таблицыToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -95,10 +115,48 @@ namespace Conductor
                      
         private void treeViewPath1_BeforeExpand(object sender, TreeViewCancelEventArgs e)
         {
+            
+
+            TreeNode node;
             Name_Note = e.Node.Name;
             Full_Path_Note = e.Node.FullPath;
 
             Open_Tree?.Invoke(this, EventArgs.Empty);
+            e.Node.Nodes.Clear();
+
+            for (int i=0;i< name_Notee_List.Count;i++)
+            {
+                node=e.Node.Nodes.Add(name_Notee_List[i]);
+                node.Name = name_Notee_List[i];
+
+                if (name_Notee_element_List[i] > 0)
+                    node.Nodes.Add("1");
+            }
+
+
+        }
+        private void treeViewPath1_AfterCollapse(object sender, TreeViewEventArgs e)
+        {
+            bool i = false;
+            if (e.Node.Nodes.Count > 0)
+                i = !i;
+            e.Node.Nodes.Clear();
+            if (i)
+            {
+                e.Node.Nodes.Add("1");
+            }
+            Name_Notee_List.Clear();
+            Full_Path_Note_List.Clear();
+            Name_Notee_element_List.Clear();
+        }
+
+        private void treeViewPath1_AfterSelect(object sender, TreeViewEventArgs e)
+        {
+            Full_Path_Note = e.Node.FullPath;
+
+            Open_Folder_in_Tree?.Invoke(this, EventArgs.Empty);
+
+
         }
     }
 }
