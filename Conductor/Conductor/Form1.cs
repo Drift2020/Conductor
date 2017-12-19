@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Runtime.InteropServices;
 
 namespace Conductor
 {
@@ -25,13 +26,14 @@ namespace Conductor
         #region Pole
 
         // 1 element , 2 name, 3 full path, 4 elements element's, 5 name, 6 full path
-
+        ImageList list = new ImageList();
 
         List<int> name_Notee_element_List = new List<int>();
         List<string> full_Path_Note_List = new List<string>();
         List<string> name_Notee_List = new List<string>();
 
 
+        public string[] str { set; get; }
         public string Name_Note { set; get; }
         public string Full_Path_Note { set; get; }
 
@@ -54,11 +56,32 @@ namespace Conductor
                 if (name_Notee_element_List[disk] > 0)
                     node.Nodes.Add("1");
             }
+
+
+            Win32.SHFILEINFO sh = new Win32.SHFILEINFO();
+            if (str.Length == 0)
+            {           
+                return;
+            }
+
+            for (int i = 0; i < str.Length; i++)
+            {
+                Win32.SHGetFileInfo(str[i], 0, ref sh, (uint)Marshal.SizeOf(sh),
+                    Win32.SHGFI_ICON | Win32.SHGFI_LARGEICON | Win32.SHGFI_DISPLAYNAME);
+                System.Drawing.Icon icon = Icon.FromHandle(sh.hIcon);
+                list.Images.Add(icon);
+                listViewFolder1.Items.Add(sh.szDisplayName, i);
+            }
         }
         public Form1()
         {
             InitializeComponent();
-            
+            list.ColorDepth = ColorDepth.Depth32Bit;
+            list.ImageSize = new Size(32, 32);
+            list.TransparentColor = Color.Transparent;
+
+            listViewFolder1.LargeImageList = list;
+
             //for (int x = 0; x < 3; ++x)
             //{
             //    // Добавляем корневой узел
@@ -115,7 +138,9 @@ namespace Conductor
                      
         private void treeViewPath1_BeforeExpand(object sender, TreeViewCancelEventArgs e)
         {
-            
+            Name_Notee_List.Clear();
+            Full_Path_Note_List.Clear();
+            Name_Notee_element_List.Clear();
 
             TreeNode node;
             Name_Note = e.Node.Name;
@@ -152,10 +177,34 @@ namespace Conductor
 
         private void treeViewPath1_AfterSelect(object sender, TreeViewEventArgs e)
         {
+            try { 
             Full_Path_Note = e.Node.FullPath;
 
             Open_Folder_in_Tree?.Invoke(this, EventArgs.Empty);
 
+            list.Images.Clear();
+            listViewFolder1.Clear();
+
+            Win32.SHFILEINFO sh = new Win32.SHFILEINFO();
+            if (str.Length == 0)
+            {
+                return;
+            }
+
+            for (int i = 0; i < str.Length; i++)
+            {
+                Win32.SHGetFileInfo(str[i], 0, ref sh, (uint)Marshal.SizeOf(sh),
+                    Win32.SHGFI_ICON | Win32.SHGFI_LARGEICON | Win32.SHGFI_DISPLAYNAME);
+                System.Drawing.Icon icon = Icon.FromHandle(sh.hIcon);
+                list.Images.Add(icon);
+                listViewFolder1.Items.Add(sh.szDisplayName, i);
+            }
+            }
+            catch (Exception ex){ MessageBox.Show(ex.Message); }
+        }
+
+        private void toolStripSplitButtonTabl_ButtonClick(object sender, EventArgs e)
+        {
 
         }
     }

@@ -41,11 +41,9 @@ namespace Conductor
                 string[] str2 = System.IO.Directory.GetDirectories((@"" + fi.FullName), "*.*");
                 _viwe.Name_Notee_List.Add(fi.Name);
                 _viwe.Full_Path_Note_List.Add(fi.FullName);
+               
 
-
-                
-
-                if (str.Length >= 0)
+                if (str2.Length > 0)
                 {
                     _viwe.Name_Notee_element_List.Add(1);
                 }
@@ -62,9 +60,19 @@ namespace Conductor
 
         public void Open_Folder_in_Tree(object sender, EventArgs e)
         {
+<<<<<<< HEAD
             string[] str = System.IO.Directory.GetDirectories((@"" + _viwe.Full_Path_Note), "*.*");
             FileInfo fi;
 
+=======
+            
+             string[] str1 = Directory.GetDirectories(@""+_viwe.Full_Path_Note.Replace("\\\\","\\"), "*.*");
+             string[] str2 = Directory.GetFiles(@""+_viwe.Full_Path_Note.Replace("\\\\", "\\"), " *.*");
+             int length = str1.Length;
+             Array.Resize(ref str1, str1.Length + str2.Length);
+             Array.Copy(str2, 0, str1, length, str2.Length);
+             _viwe.str = str1;
+>>>>>>> 814f5590ba9243c6d6705f20e26d1000b7c8dd95
         }
         public void Edit_List_Viwe(object sender, EventArgs e)
         {
@@ -84,27 +92,51 @@ namespace Conductor
         }
         public void Start_program(object sender, EventArgs e)
         {
+
+            string[] str1 = Directory.GetLogicalDrives();
+            //  string[] str1 = Directory.GetDirectories(@"C:\Windows", "*.*");
+            // string[] str2 = Directory.GetFiles(@"C:\Windows", "*.*");
+            int length = str1.Length;
+          //  Array.Resize(ref str1, str1.Length + str2.Length);
+           // Array.Copy(str2, 0, str1, length, str2.Length);
+            _viwe.str = str1;
+
+
+            ////////////////////////////////////
+
+
+
             string[] astrLogicalDrives = System.IO.Directory.GetLogicalDrives(); // System.Environment.GetLogicalDrives();    
                              
             foreach (string disk in astrLogicalDrives)
                 _viwe.Name_Notee_List.Add(disk);
-
+            string[] str= null;
             for (int element=0; element < astrLogicalDrives.Length;element++)
             {
-                string[] str = System.IO.Directory.GetDirectories((@"" + astrLogicalDrives[element]), "*.*");
 
-                if (str.Length >= 0)
+                try
                 {
-                    _viwe.Name_Notee_element_List.Add(1);
+                    str = System.IO.Directory.GetDirectories((@"" + astrLogicalDrives[element]), "*.*");
+                    if (str.Length > 0)
+                    {
+                        _viwe.Name_Notee_element_List.Add(1);
+                    }
+                    else
+                        _viwe.Name_Notee_element_List.Add(0);
                 }
-                else
+                catch
+                {
                     _viwe.Name_Notee_element_List.Add(0);
+                }
 
+               
             }
+              
+        }
 
             ////  foreach (string disk in astrLogicalDrives)
             ////    node = treeViewPath1.Nodes.Add(disk);        
-        }
+        
         public void Renewal(object sender, EventArgs e)
         {
 

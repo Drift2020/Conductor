@@ -12,9 +12,30 @@ namespace Conductor.Model
         private int element;
         public Histori()
         {
-            element = 0;
+            element =0;
             list = new List<string>();
         }
-
+        public void Add(string s)
+        {
+            list.Add(s);
+        }
+        public string Move()
+        {
+            ++element;
+            return list[element];
+        }
+        public string Back()
+        {
+            --element;
+            return list[element];
+        }
+        public string Now()
+        {
+            return list[element];
+        }
+        public void Clean()
+        {
+            list.Clear();
+        }
     }
 }

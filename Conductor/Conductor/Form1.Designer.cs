@@ -144,6 +144,7 @@
             this.toolStripSplitButtonTabl.Name = "toolStripSplitButtonTabl";
             this.toolStripSplitButtonTabl.Size = new System.Drawing.Size(32, 22);
             this.toolStripSplitButtonTabl.Text = "toolStripSplitButton1";
+            this.toolStripSplitButtonTabl.ButtonClick += new System.EventHandler(this.toolStripSplitButtonTabl_ButtonClick);
             // 
             // ToolStripMenuItem1
             // 
