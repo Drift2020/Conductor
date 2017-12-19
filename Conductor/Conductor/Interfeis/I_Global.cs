@@ -10,6 +10,8 @@ namespace Conductor
     {
         event EventHandler<EventArgs> Close_Program;
         event EventHandler<EventArgs> Open_Tree;
+        event EventHandler<EventArgs> Close_Tree;
+        event EventHandler<EventArgs> Remove_Die_Path;
         event EventHandler<EventArgs> Open_Folder_in_Tree;
         event EventHandler<EventArgs> Edit_List_Viwe;
         event EventHandler<EventArgs> Up;

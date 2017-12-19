@@ -11,11 +11,13 @@ using System.Runtime.InteropServices;
 
 namespace Conductor
 {
-    
-    public partial class Form1 : Form,I_Global
+
+    public partial class Form1 : Form, I_Global
     {
         public event EventHandler<EventArgs> Close_Program;
         public event EventHandler<EventArgs> Open_Tree;
+        public event EventHandler<EventArgs> Close_Tree;
+        public event EventHandler<EventArgs> Remove_Die_Path;
         public event EventHandler<EventArgs> Open_Folder_in_Tree;
         public event EventHandler<EventArgs> Edit_List_Viwe;
         public event EventHandler<EventArgs> Up;
@@ -31,7 +33,6 @@ namespace Conductor
         List<int> name_Notee_element_List = new List<int>();
         List<string> full_Path_Note_List = new List<string>();
         List<string> name_Notee_List = new List<string>();
-
 
         public string[] str { set; get; }
         public string Name_Note { set; get; }
@@ -60,7 +61,7 @@ namespace Conductor
 
             Win32.SHFILEINFO sh = new Win32.SHFILEINFO();
             if (str.Length == 0)
-            {           
+            {
                 return;
             }
 
@@ -102,17 +103,73 @@ namespace Conductor
 
         private void toolStripButtonEnd_Click(object sender, EventArgs e)
         {
+            try
+            {
+                End?.Invoke(this, EventArgs.Empty);
 
+                if (str != null)
+                {
+                 
+                    list.Images.Clear();
+                    listViewFolder1.Clear();
+
+                    Win32.SHFILEINFO sh = new Win32.SHFILEINFO();
+                    if (str.Length == 0)
+                    {
+                        return;
+                    }
+
+                    for (int i = 0; i < str.Length; i++)
+                    {
+                        Win32.SHGetFileInfo(str[i], 0, ref sh, (uint)Marshal.SizeOf(sh),
+                            Win32.SHGFI_ICON | Win32.SHGFI_LARGEICON | Win32.SHGFI_DISPLAYNAME);
+                        Icon icon = Icon.FromHandle(sh.hIcon);
+                        list.Images.Add(icon);
+                        listViewFolder1.Items.Add(sh.szDisplayName, i);
+                    }
+                }             
+            }
+            catch (Exception ex) { Remove_Die_Path?.Invoke(this, EventArgs.Empty);
+                MessageBox.Show(ex.Message); }
         }
 
         private void toolStripButtonMove_Click(object sender, EventArgs e)
         {
+            try
+            {
+                Move_?.Invoke(this, EventArgs.Empty);
 
+                if (str != null)
+                {
+
+                    list.Images.Clear();
+                    listViewFolder1.Clear();
+
+                    Win32.SHFILEINFO sh = new Win32.SHFILEINFO();
+                    if (str.Length == 0)
+                    {
+                        return;
+                    }
+
+                    for (int i = 0; i < str.Length; i++)
+                    {
+                        Win32.SHGetFileInfo(str[i], 0, ref sh, (uint)Marshal.SizeOf(sh),
+                            Win32.SHGFI_ICON | Win32.SHGFI_LARGEICON | Win32.SHGFI_DISPLAYNAME);
+                        Icon icon = Icon.FromHandle(sh.hIcon);
+                        list.Images.Add(icon);
+                        listViewFolder1.Items.Add(sh.szDisplayName, i);
+                    }
+                }
+            }
+            catch (Exception ex) { Remove_Die_Path?.Invoke(this, EventArgs.Empty); MessageBox.Show(ex.Message); }
         }
 
         private void toolStripButtonUp_Click(object sender, EventArgs e)
         {
-
+            try
+            {
+            }
+            catch (Exception ex) { Remove_Die_Path?.Invoke(this, EventArgs.Empty); MessageBox.Show(ex.Message); }
         }
 
         private void toolStripButtonRenewal_Click(object sender, EventArgs e)
@@ -135,7 +192,7 @@ namespace Conductor
 
         }
         #endregion Button
-                     
+
         private void treeViewPath1_BeforeExpand(object sender, TreeViewCancelEventArgs e)
         {
             Name_Notee_List.Clear();
@@ -149,9 +206,9 @@ namespace Conductor
             Open_Tree?.Invoke(this, EventArgs.Empty);
             e.Node.Nodes.Clear();
 
-            for (int i=0;i< name_Notee_List.Count;i++)
+            for (int i = 0; i < name_Notee_List.Count; i++)
             {
-                node=e.Node.Nodes.Add(name_Notee_List[i]);
+                node = e.Node.Nodes.Add(name_Notee_List[i]);
                 node.Name = name_Notee_List[i];
 
                 if (name_Notee_element_List[i] > 0)
@@ -166,6 +223,11 @@ namespace Conductor
             if (e.Node.Nodes.Count > 0)
                 i = !i;
             e.Node.Nodes.Clear();
+
+            Full_Path_Note = e.Node.FullPath;
+
+            Close_Tree?.Invoke(this, EventArgs.Empty);
+
             if (i)
             {
                 e.Node.Nodes.Add("1");
@@ -177,30 +239,33 @@ namespace Conductor
 
         private void treeViewPath1_AfterSelect(object sender, TreeViewEventArgs e)
         {
-            try { 
-            Full_Path_Note = e.Node.FullPath;
-
-            Open_Folder_in_Tree?.Invoke(this, EventArgs.Empty);
-
-            list.Images.Clear();
-            listViewFolder1.Clear();
-
-            Win32.SHFILEINFO sh = new Win32.SHFILEINFO();
-            if (str.Length == 0)
+            try
             {
-                return;
-            }
+                Full_Path_Note = e.Node.FullPath;
 
-            for (int i = 0; i < str.Length; i++)
-            {
-                Win32.SHGetFileInfo(str[i], 0, ref sh, (uint)Marshal.SizeOf(sh),
-                    Win32.SHGFI_ICON | Win32.SHGFI_LARGEICON | Win32.SHGFI_DISPLAYNAME);
-                System.Drawing.Icon icon = Icon.FromHandle(sh.hIcon);
-                list.Images.Add(icon);
-                listViewFolder1.Items.Add(sh.szDisplayName, i);
+                Open_Folder_in_Tree?.Invoke(this, EventArgs.Empty);
+
+                list.Images.Clear();
+                listViewFolder1.Clear();
+
+                Win32.SHFILEINFO sh = new Win32.SHFILEINFO();
+                if (str.Length == 0)
+                {
+                    return;
+                }
+
+                for (int i = 0; i < str.Length; i++)
+                {
+                    Win32.SHGetFileInfo(str[i], 0, ref sh, (uint)Marshal.SizeOf(sh),
+                        Win32.SHGFI_ICON | Win32.SHGFI_LARGEICON | Win32.SHGFI_DISPLAYNAME);
+                    Icon icon = Icon.FromHandle(sh.hIcon);
+                    list.Images.Add(icon);
+                    listViewFolder1.Items.Add(sh.szDisplayName, i);
+                }
             }
-            }
-            catch (Exception ex){ MessageBox.Show(ex.Message); }
+            catch (Exception ex) {
+             
+                    MessageBox.Show(ex.Message); }
         }
 
         private void toolStripSplitButtonTabl_ButtonClick(object sender, EventArgs e)

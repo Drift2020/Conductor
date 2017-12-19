@@ -4,38 +4,88 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Conductor.Model
+namespace Conductor
 {
     class Histori
     {
         private List<string> list;
-        private int element;
+        private List<string> openTree;
+        private int element_l;
+        private int element_o;
         public Histori()
         {
-            element =0;
+            element_l = 0;
             list = new List<string>();
+            openTree = new List<string>();
         }
-        public void Add(string s)
+        public void Add_Tree(string s)
         {
+            if (list.Count > 0)
+                ++element_o;
+           
+            openTree.Add(s);
+        }
+        public void Dell_Tree(string s)
+        {
+            openTree.Remove(s);
+        }
+        public void Clean_Tree()
+        {
+            openTree.Clear();
+        }
+        public string Move_Tree()
+        {
+            if (element_o < openTree.Count)
+            {
+                ++element_o;
+
+                return openTree[element_o];
+            }
+            else
+            {
+             
+                return "none";
+            }
+        }
+
+        public void Add_Histori(string s)
+        {
+            if(list.Count>0)
+            element_l++;
+
             list.Add(s);
         }
-        public string Move()
+        public string Move_Histori()
         {
-            ++element;
-            return list[element];
+            if (element_l < list.Count-1)
+            {
+                ++element_l;
+                return list[element_l];
+            }
+            else
+                return "none";
         }
-        public string Back()
+        public string Back_Histori()
         {
-            --element;
-            return list[element];
+            if (element_l > 0)
+            {
+                --element_l;
+                return list[element_l];
+            }
+            else
+                return "none";
         }
-        public string Now()
+        public string Now_Histori()
         {
-            return list[element];
+            return list[element_l];
         }
-        public void Clean()
+        public void Clean_Histori()
         {
             list.Clear();
+        }
+        public void Dell_Histori_element(string s)
+        {
+            list.Remove(s);
         }
     }
 }

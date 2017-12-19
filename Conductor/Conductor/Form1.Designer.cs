@@ -182,7 +182,7 @@
             this.listViewFolder1.Location = new System.Drawing.Point(218, 28);
             this.listViewFolder1.Name = "listViewFolder1";
             this.listViewFolder1.Size = new System.Drawing.Size(656, 496);
-            this.listViewFolder1.TabIndex = 2;
+            this.listViewFolder1.TabIndex = 5;
             this.listViewFolder1.UseCompatibleStateImageBehavior = false;
             // 
             // Form1
