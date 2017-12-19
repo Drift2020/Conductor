@@ -62,6 +62,8 @@ namespace Conductor
 
         public void Open_Folder_in_Tree(object sender, EventArgs e)
         {
+            string[] str = System.IO.Directory.GetDirectories((@"" + _viwe.Full_Path_Note), "*.*");
+            FileInfo fi;
 
         }
         public void Edit_List_Viwe(object sender, EventArgs e)
