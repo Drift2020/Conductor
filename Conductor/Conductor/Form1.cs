@@ -168,6 +168,28 @@ namespace Conductor
         {
             try
             {
+                Up?.Invoke(this, EventArgs.Empty);
+                if (str != null)
+                {
+
+                    list.Images.Clear();
+                    listViewFolder1.Clear();
+
+                    Win32.SHFILEINFO sh = new Win32.SHFILEINFO();
+                    if (str.Length == 0)
+                    {
+                        return;
+                    }
+
+                    for (int i = 0; i < str.Length; i++)
+                    {
+                        Win32.SHGetFileInfo(str[i], 0, ref sh, (uint)Marshal.SizeOf(sh),
+                            Win32.SHGFI_ICON | Win32.SHGFI_LARGEICON | Win32.SHGFI_DISPLAYNAME);
+                        Icon icon = Icon.FromHandle(sh.hIcon);
+                        list.Images.Add(icon);
+                        listViewFolder1.Items.Add(sh.szDisplayName, i);
+                    }
+                }
             }
             catch (Exception ex) { Remove_Die_Path?.Invoke(this, EventArgs.Empty); MessageBox.Show(ex.Message); }
         }
@@ -270,7 +292,11 @@ namespace Conductor
 
         private void toolStripSplitButtonTabl_ButtonClick(object sender, EventArgs e)
         {
-
+            try
+            {
+                Edit_List_Viwe?.Invoke(this, EventArgs.Empty);
+            }
+            catch (Exception ex) { Remove_Die_Path?.Invoke(this, EventArgs.Empty); MessageBox.Show(ex.Message); }
         }
     }
 }

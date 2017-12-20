@@ -88,7 +88,34 @@ namespace Conductor
         }
         public void Up(object sender, EventArgs e)
         {
-         
+            string temp = model.Now_Histori();
+            if ("none" != temp)
+            {
+                int i = temp.LastIndexOf('\\');
+                temp = temp.Substring(0, i);
+                if (temp[temp.Length-1] != ':')
+                {
+                    model.Add_Histori(temp);
+
+                    string[] str1 = Directory.GetDirectories(@"" + temp, "*.*");
+                    string[] str2 = Directory.GetFiles(@"" + temp, "*.*");
+
+                    int length = str1.Length;
+
+                    Array.Resize(ref str1, str1.Length + str2.Length);
+                    Array.Copy(str2, 0, str1, length, str2.Length);
+
+                    _viwe.str = str1;
+                }
+                else
+                {
+                    _viwe.str = null;
+                }
+            }
+            else
+            {
+                _viwe.str = null;
+            }
         }
         public void End(object sender, EventArgs e)
         {
