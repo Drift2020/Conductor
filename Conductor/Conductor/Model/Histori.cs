@@ -85,6 +85,7 @@ namespace Conductor
         }
         public void Dell_Histori_element(string s)
         {
+            element_l--;
             list.Remove(s);
         }
     }

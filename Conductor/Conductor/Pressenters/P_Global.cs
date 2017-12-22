@@ -88,13 +88,37 @@ namespace Conductor
         }
         public void Up(object sender, EventArgs e)
         {
+
             string temp = model.Now_Histori();
+
+            string _temp = temp;
+            string _temp1 = temp;
+
             if ("none" != temp)
             {
+                if(temp!="g")
+                {
+
+               
                 int i = temp.LastIndexOf('\\');
                 temp = temp.Substring(0, i);
-                if (temp[temp.Length-1] != ':')
+
+                _temp1 = _temp1.Substring(0,i);
+                _temp1 += "\\";
+                }
+
+                if (_temp1 == _temp)
                 {
+                    string[] temps = Directory.GetLogicalDrives();
+                    _viwe.str = temps;
+                    model.Add_Histori("g");
+                    return;
+                }
+                else if (temp[temp.Length-1] == ':')
+                {
+                    temp += "\\";
+                }
+               
                     model.Add_Histori(temp);
 
                     string[] str1 = Directory.GetDirectories(@"" + temp, "*.*");
@@ -106,11 +130,7 @@ namespace Conductor
                     Array.Copy(str2, 0, str1, length, str2.Length);
 
                     _viwe.str = str1;
-                }
-                else
-                {
-                    _viwe.str = null;
-                }
+               
             }
             else
             {
@@ -119,12 +139,36 @@ namespace Conductor
         }
         public void End(object sender, EventArgs e)
         {
-
+            string temp1 = model.Now_Histori();
             string temp = model.Back_Histori();
+            string _temp = temp;
+            string _temp1 = temp;
+
             if ("none" != temp)
             {
+                if (temp != "g" && temp1 != "g")
+                {
 
-            string[] str1 = Directory.GetDirectories(@"" + temp, "*.*");
+                    int i = temp.LastIndexOf('\\');
+                    temp = temp.Substring(0, i);
+
+                    _temp1 = _temp1.Substring(0, i);
+                    _temp1 += "\\";
+                }
+
+                if (_temp1 == _temp&& temp1!="g")
+                {
+                    string[] temps = Directory.GetLogicalDrives();
+                    _viwe.str = temps;
+                    model.Add_Histori("g");
+                    return;
+                }
+                else if (temp[temp.Length - 1] == ':')
+                {
+                    temp += "\\";
+                }
+
+                string[] str1 = Directory.GetDirectories(@"" + temp, "*.*");
             string[] str2 = Directory.GetFiles(@"" + temp, "*.*");
             int length = str1.Length;
             Array.Resize(ref str1, str1.Length + str2.Length);
@@ -138,9 +182,35 @@ namespace Conductor
         }
         public void Move_(object sender, EventArgs e)
         {
+            string temp1 = model.Now_Histori();
             string temp = model.Move_Histori();
+            string _temp = temp;
+            string _temp1 = temp;
+
             if ("none" != temp)
             {
+                if (temp != "g" && temp1 != "g")
+                {
+
+
+                    int i = temp.LastIndexOf('\\');
+                    temp = temp.Substring(0, i);
+
+                    _temp1 = _temp1.Substring(0, i);
+                    _temp1 += "\\";
+                }
+
+                if (_temp1 == _temp)
+                {
+                    string[] temps = Directory.GetLogicalDrives();
+                    _viwe.str = temps;
+                    model.Add_Histori("g");
+                    return;
+                }
+                else if (temp[temp.Length - 1] == ':')
+                {
+                    temp += "\\";
+                }
 
                 string[] str1 = Directory.GetDirectories(@"" + temp, "*.*");
                 string[] str2 = Directory.GetFiles(@"" + temp, "*.*");
