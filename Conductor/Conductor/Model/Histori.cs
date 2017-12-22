@@ -20,8 +20,7 @@ namespace Conductor
         }
         public void Add_Tree(string s)
         {
-            if (list.Count > 0)
-                ++element_o;
+            
            
             openTree.Add(s);
         }
@@ -37,13 +36,13 @@ namespace Conductor
         {
             if (element_o < openTree.Count)
             {
-                ++element_o;
+             
 
-                return openTree[element_o];
+                return openTree[element_o++];
             }
             else
             {
-             
+                element_o = 0;
                 return "none";
             }
         }

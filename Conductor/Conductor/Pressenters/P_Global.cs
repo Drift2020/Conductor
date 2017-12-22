@@ -11,8 +11,8 @@ namespace Conductor
     {
         private readonly I_Global _viwe;
         private readonly Histori model;
-       //  private readonly 
-       public P_Global(I_Global viwe)
+        //  private readonly 
+        public P_Global(I_Global viwe)
         {
             model = new Histori();
             _viwe = viwe;
@@ -26,7 +26,7 @@ namespace Conductor
             _viwe.Move_ += new EventHandler<EventArgs>(Move_);
             _viwe.Start_program += new EventHandler<EventArgs>(Start_program);
             _viwe.Renewal += new EventHandler<EventArgs>(Renewal);
-            _viwe.Remove_Die_Path+= new EventHandler<EventArgs>(Remove_Die_Path);
+            _viwe.Remove_Die_Path += new EventHandler<EventArgs>(Remove_Die_Path);
         }
         public void Remove_Die_Path(object sender, EventArgs e)
         {
@@ -41,96 +41,102 @@ namespace Conductor
             model.Dell_Tree(_viwe.Full_Path_Note);
         }
         public void Open_Tree(object sender, EventArgs e)
-        {            
+        {
             string[] str = System.IO.Directory.GetDirectories((@"" + _viwe.Full_Path_Note), "*.*");
             FileInfo fi;
+
             model.Add_Tree(_viwe.Full_Path_Note);
+            
 
-
-            for (int i=0; i<str.Length; i++)
+            for (int i = 0; i < str.Length; i++)
             {
-                try { 
+                try
+                {
                     fi = new FileInfo(str[i]);
                     string[] str2 = System.IO.Directory.GetDirectories((@"" + fi.FullName), "*.*");
                     _viwe.Name_Notee_List.Add(fi.Name);
                     _viwe.Full_Path_Note_List.Add(fi.FullName);
-               
+
                     if (str2.Length > 0)
                     {
                         _viwe.Name_Notee_element_List.Add(1);
                     }
                     else
-                    _viwe.Name_Notee_element_List.Add(0);
+                        _viwe.Name_Notee_element_List.Add(0);
                 }
                 catch (Exception ex)
                 {
-                 
+
                 };
-            }           
+            }
         }
 
         public void Open_Folder_in_Tree(object sender, EventArgs e)
         {
             model.Add_Histori(_viwe.Full_Path_Note.Replace("\\\\", "\\"));
 
-            string temp=_viwe.Full_Path_Note.Replace("\\\\", "\\");
-             string[] str1 = Directory.GetDirectories(@""+ temp, "*.*");
-             string[] str2 = Directory.GetFiles(@""+ temp, "*.*");
-             int length = str1.Length;
-             Array.Resize(ref str1, str1.Length + str2.Length);
-             Array.Copy(str2, 0, str1, length, str2.Length);
-             _viwe.str = str1;
+            string temp = _viwe.Full_Path_Note.Replace("\\\\", "\\");
+            string[] str1 = Directory.GetDirectories(@"" + temp, "*.*");
+            string[] str2 = Directory.GetFiles(@"" + temp, "*.*");
+            int length = str1.Length;
+            Array.Resize(ref str1, str1.Length + str2.Length);
+            Array.Copy(str2, 0, str1, length, str2.Length);
+            _viwe.str = str1;
 
         }
         public void Edit_List_Viwe(object sender, EventArgs e)
         {
 
         }
+        //g - LogicalDrives
         public void Up(object sender, EventArgs e)
         {
 
-            string temp = model.Now_Histori();
-
-            string _temp = temp;
-            string _temp1 = temp;
-
+            string _temp;
+            string temp = _temp = model.Back_Histori();
+            string[] str1;
+            string[] str2;
             if ("none" != temp)
             {
-                if(temp!="g")
+                if(temp != "g")
                 {
-
-               
-                int i = temp.LastIndexOf('\\');
-                temp = temp.Substring(0, i);
-
-                _temp1 = _temp1.Substring(0,i);
-                _temp1 += "\\";
+                    int i = temp.LastIndexOf('\\');
+                    if(temp.Length-1==i)
+                    {
+                        temp = temp.Substring(0, i);
+                    }
+                    else
+                    {
+                        temp = temp.Substring(0, i);
+                        if (temp[temp.Length - 1] == ':')
+                            temp += '\\';
+                    }
+                   
                 }
 
-                if (_temp1 == _temp)
+                ////// ////// ////// ////// ////// ////// ////// //////
+                if (temp == "g")
                 {
-                    string[] temps = Directory.GetLogicalDrives();
-                    _viwe.str = temps;
-                    model.Add_Histori("g");
-                    return;
+                    str1 = Directory.GetLogicalDrives();
                 }
-                else if (temp[temp.Length-1] == ':')
+                else if (temp[temp.Length - 1] == ':')
                 {
-                    temp += "\\";
+                    str1 = Directory.GetLogicalDrives();
+                    temp = _temp;
                 }
-               
-                    model.Add_Histori(temp);
-
-                    string[] str1 = Directory.GetDirectories(@"" + temp, "*.*");
-                    string[] str2 = Directory.GetFiles(@"" + temp, "*.*");
+                else
+                {
+                    str1 = Directory.GetDirectories(@"" + temp, "*.*");
+                    str2 = Directory.GetFiles(@"" + temp, "*.*");
 
                     int length = str1.Length;
 
                     Array.Resize(ref str1, str1.Length + str2.Length);
                     Array.Copy(str2, 0, str1, length, str2.Length);
-
-                    _viwe.str = str1;
-               
+                }
+                ////// ////// ////// ////// ////// ////// ////// //////
+                _viwe.str = str1;
+                model.Add_Histori(temp);
             }
             else
             {
@@ -139,41 +145,33 @@ namespace Conductor
         }
         public void End(object sender, EventArgs e)
         {
-            string temp1 = model.Now_Histori();
-            string temp = model.Back_Histori();
-            string _temp = temp;
-            string _temp1 = temp;
-
+            string _temp;
+            string temp = _temp = model.Back_Histori();
+          
+            string[] str1;
+            string[] str2;
             if ("none" != temp)
             {
-                if (temp != "g" && temp1 != "g")
+               
+
+
+                if (temp == "g")
                 {
-
-                    int i = temp.LastIndexOf('\\');
-                    temp = temp.Substring(0, i);
-
-                    _temp1 = _temp1.Substring(0, i);
-                    _temp1 += "\\";
+                    str1 = Directory.GetLogicalDrives();
                 }
-
-                if (_temp1 == _temp&& temp1!="g")
+             
+                else
                 {
-                    string[] temps = Directory.GetLogicalDrives();
-                    _viwe.str = temps;
-                    model.Add_Histori("g");
-                    return;
-                }
-                else if (temp[temp.Length - 1] == ':')
-                {
-                    temp += "\\";
-                }
+                    str1 = Directory.GetDirectories(@"" + temp, "*.*");
+                    str2 = Directory.GetFiles(@"" + temp, "*.*");
 
-                string[] str1 = Directory.GetDirectories(@"" + temp, "*.*");
-            string[] str2 = Directory.GetFiles(@"" + temp, "*.*");
-            int length = str1.Length;
-            Array.Resize(ref str1, str1.Length + str2.Length);
-            Array.Copy(str2, 0, str1, length, str2.Length);
-            _viwe.str = str1;
+                    int length = str1.Length;
+
+                    Array.Resize(ref str1, str1.Length + str2.Length);
+                    Array.Copy(str2, 0, str1, length, str2.Length);
+                }
+                _viwe.str = str1;
+               
             }
             else
             {
@@ -182,41 +180,29 @@ namespace Conductor
         }
         public void Move_(object sender, EventArgs e)
         {
-            string temp1 = model.Now_Histori();
-            string temp = model.Move_Histori();
-            string _temp = temp;
-            string _temp1 = temp;
-
+            string _temp;
+            string temp = _temp = model.Move_Histori();
+            string[] str1;
+            string[] str2;
             if ("none" != temp)
             {
-                if (temp != "g" && temp1 != "g")
+                
+
+
+                if (temp == "g")
                 {
-
-
-                    int i = temp.LastIndexOf('\\');
-                    temp = temp.Substring(0, i);
-
-                    _temp1 = _temp1.Substring(0, i);
-                    _temp1 += "\\";
-                }
-
-                if (_temp1 == _temp)
+                    str1 = Directory.GetLogicalDrives();
+                }             
+                else
                 {
-                    string[] temps = Directory.GetLogicalDrives();
-                    _viwe.str = temps;
-                    model.Add_Histori("g");
-                    return;
-                }
-                else if (temp[temp.Length - 1] == ':')
-                {
-                    temp += "\\";
-                }
+                    str1 = Directory.GetDirectories(@"" + temp, "*.*");
+                    str2 = Directory.GetFiles(@"" + temp, "*.*");
 
-                string[] str1 = Directory.GetDirectories(@"" + temp, "*.*");
-                string[] str2 = Directory.GetFiles(@"" + temp, "*.*");
-                int length = str1.Length;
-                Array.Resize(ref str1, str1.Length + str2.Length);
-                Array.Copy(str2, 0, str1, length, str2.Length);
+                    int length = str1.Length;
+
+                    Array.Resize(ref str1, str1.Length + str2.Length);
+                    Array.Copy(str2, 0, str1, length, str2.Length);
+                }
                 _viwe.str = str1;
             }
             else
@@ -226,18 +212,18 @@ namespace Conductor
         }
         public void Start_program(object sender, EventArgs e)
         {
-            string[] str1 = Directory.GetLogicalDrives();   
-            int length = str1.Length;        
+            string[] str1 = Directory.GetLogicalDrives();
+            int length = str1.Length;
             _viwe.str = str1;
 
             ////////////////////////////////////
 
             string[] astrLogicalDrives = System.IO.Directory.GetLogicalDrives(); // System.Environment.GetLogicalDrives();    
-                             
+
             foreach (string disk in astrLogicalDrives)
                 _viwe.Name_Notee_List.Add(disk);
-            string[] str= null;
-            for (int element=0; element < astrLogicalDrives.Length;element++)
+            string[] str = null;
+            for (int element = 0; element < astrLogicalDrives.Length; element++)
             {
                 try
                 {
@@ -252,15 +238,182 @@ namespace Conductor
                 catch
                 {
                     _viwe.Name_Notee_element_List.Add(0);
-                }               
-            }              
+                }
+            }
+            model.Add_Histori("g");
         }
-            ////  foreach (string disk in astrLogicalDrives)
-            ////    node = treeViewPath1.Nodes.Add(disk);        
-        
+        ////  foreach (string disk in astrLogicalDrives)
+        ////    node = treeViewPath1.Nodes.Add(disk);        
+
         public void Renewal(object sender, EventArgs e)
         {
+            for (string s = model.Move_Tree(); s != "none"; s = model.Move_Tree())
+            {
+                _viwe.Name_Notee_element_List_Tree.Add(s);
+                string[] str = System.IO.Directory.GetDirectories((@"" +s ), "*.*");
+                FileInfo fi;
+
+                for (int i = 0; i < str.Length; i++)
+                {
+                    try
+                    {
+                        fi = new FileInfo(str[i]);
+                        string[] str2 = System.IO.Directory.GetDirectories((@"" + fi.FullName), "*.*");
+                        _viwe.Name_Notee_List.Add(fi.Name);
+                        _viwe.Full_Path_Note_List.Add(fi.FullName);
+
+                        if (str2.Length > 0)
+                        {
+                            _viwe.Name_Notee_element_List.Add(1);
+                        }
+                        else
+                            _viwe.Name_Notee_element_List.Add(0);
+                    }
+                    catch (Exception ex)
+                    {
+
+                    };
+                }
+            }
+
+           
+
+
 
         }
     }
 }
+
+
+//public void Up(object sender, EventArgs e)
+//{
+//    //string temp1 = model.Now_Histori();
+//    string temp = model.Back_Histori();
+//    //string _temp = temp;
+//    //string _temp1 = temp;
+
+//    if ("none" != temp)
+//    {
+
+//        /*if (temp != "g")
+//        {
+//            int i = temp.LastIndexOf('\\');
+//            temp = temp.Substring(0, i);
+//            _temp1 = _temp1.Substring(0, i);
+//            _temp1 += "\\";
+//        }
+//        if (_temp1 == _temp)
+//        {
+//            string[] temps = Directory.GetLogicalDrives();
+//            _viwe.str = temps;
+//            model.Add_Histori("g");
+//            return;
+//        }
+//        else if (temp[temp.Length - 1] == ':')
+//        {
+//            temp += "\\";
+//        }*/
+//        model.Add_Histori(temp);
+
+//        string[] str1 = Directory.GetDirectories(@"" + temp, "*.*");
+//        string[] str2 = Directory.GetFiles(@"" + temp, "*.*");
+
+//        int length = str1.Length;
+
+//        Array.Resize(ref str1, str1.Length + str2.Length);
+//        Array.Copy(str2, 0, str1, length, str2.Length);
+
+//        _viwe.str = str1;
+//    }
+//    else
+//    {
+//        _viwe.str = null;
+//    }
+//}
+//public void End(object sender, EventArgs e)
+//{
+//    // string temp1 = model.Now_Histori();
+//    string temp = model.Back_Histori();
+//    //string _temp = temp;
+//    //string _temp1 = temp;
+
+//    if ("none" != temp)
+//    {
+//        //if (temp != "g" && temp1 != "g")
+//        //{
+
+//        //    int i = temp.LastIndexOf('\\');
+//        //    temp = temp.Substring(0, i);
+
+//        //    _temp1 = _temp1.Substring(0, i);
+//        //    _temp1 += "\\";
+//        //}
+
+//        //if (_temp1 == _temp&& temp1!="g")
+//        //{
+//        //    string[] temps = Directory.GetLogicalDrives();
+//        //    _viwe.str = temps;
+//        //    model.Add_Histori("g");
+//        //    return;
+//        //}
+//        //else if (temp[temp.Length - 1] == ':')
+//        //{
+//        //    temp += "\\";
+//        //}
+
+//        string[] str1 = Directory.GetDirectories(@"" + temp, "*.*");
+//        string[] str2 = Directory.GetFiles(@"" + temp, "*.*");
+//        int length = str1.Length;
+//        Array.Resize(ref str1, str1.Length + str2.Length);
+//        Array.Copy(str2, 0, str1, length, str2.Length);
+//        _viwe.str = str1;
+//    }
+//    else
+//    {
+//        _viwe.str = null;
+//    }
+//}
+//public void Move_(object sender, EventArgs e)
+//{
+//    //string temp1 = model.Now_Histori();
+//    string temp = model.Move_Histori();
+//    // string _temp = temp;
+//    // string _temp1 = temp;
+
+//    if ("none" != temp)
+//    {
+//        //if (temp != "g" && temp1 != "g")
+//        //{
+
+
+//        //    int i = temp.LastIndexOf('\\');
+//        //    temp = temp.Substring(0, i);
+
+//        //    _temp1 = _temp1.Substring(0, i);
+//        //    _temp1 += "\\";
+//        //}
+
+//        //if (_temp1 == _temp)
+//        //{
+//        //    string[] temps = Directory.GetLogicalDrives();
+//        //    _viwe.str = temps;
+//        //    model.Add_Histori("g");
+//        //    return;
+//        //}
+//        //else if (temp[temp.Length - 1] == ':')
+//        //{
+//        //    temp += "\\";
+//        //}
+
+//        string[] str1 = Directory.GetDirectories(@"" + temp, "*.*");
+//        string[] str2 = Directory.GetFiles(@"" + temp, "*.*");
+//        int length = str1.Length;
+//        Array.Resize(ref str1, str1.Length + str2.Length);
+//        Array.Copy(str2, 0, str1, length, str2.Length);
+//        _viwe.str = str1;
+//    }
+//    else
+//    {
+//        _viwe.str = null;
+//    }
+//}

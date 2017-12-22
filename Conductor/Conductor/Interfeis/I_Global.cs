@@ -27,5 +27,6 @@ namespace Conductor
         List<string> Full_Path_Note_List { set; get; }
         List<int> Name_Notee_element_List { set; get; }
         List<string> Name_Notee_List { set; get; }
+        List<string> Name_Notee_element_List_Tree { set; get; }
     }
 }

@@ -29,19 +29,22 @@ namespace Conductor
 
         // 1 element , 2 name, 3 full path, 4 elements element's, 5 name, 6 full path
         ImageList list = new ImageList();
-
+        
+        bool start = true;
         List<int> name_Notee_element_List = new List<int>();
         List<string> full_Path_Note_List = new List<string>();
+        List<string> name_Notee_element_List_Tree = new List<string>();
         List<string> name_Notee_List = new List<string>();
 
         public string[] str { set; get; }
         public string Name_Note { set; get; }
         public string Full_Path_Note { set; get; }
+        
 
         public List<string> Full_Path_Note_List { set { full_Path_Note_List = value; } get { return full_Path_Note_List; } }
         public List<string> Name_Notee_List { set { name_Notee_List = value; } get { return name_Notee_List; } }
         public List<int> Name_Notee_element_List { set { name_Notee_element_List = value; } get { return name_Notee_element_List; } }
-
+        public List<string> Name_Notee_element_List_Tree { set { name_Notee_element_List_Tree = value; } get { return name_Notee_element_List_Tree; } }
         #endregion Pole
         private void Form1_Load(object sender, EventArgs e)
         {
@@ -53,7 +56,7 @@ namespace Conductor
             for (int disk = 0; disk < name_Notee_List.Count; disk++)
             {
                 node = treeViewPath1.Nodes.Add(name_Notee_List[disk]);
-
+                node.Name = name_Notee_List[disk];
                 if (name_Notee_element_List[disk] > 0)
                     node.Nodes.Add("1");
             }
@@ -82,7 +85,7 @@ namespace Conductor
             list.TransparentColor = Color.Transparent;
 
             listViewFolder1.LargeImageList = list;
-
+           
             //for (int x = 0; x < 3; ++x)
             //{
             //    // Добавляем корневой узел
@@ -166,6 +169,7 @@ namespace Conductor
 
         private void toolStripButtonUp_Click(object sender, EventArgs e)
         {
+           
             try
             {
                 Up?.Invoke(this, EventArgs.Empty);
@@ -196,6 +200,40 @@ namespace Conductor
 
         private void toolStripButtonRenewal_Click(object sender, EventArgs e)
         {
+            Name_Notee_List.Clear();
+            Full_Path_Note_List.Clear();
+            Name_Notee_element_List.Clear();
+
+
+            Renewal?.Invoke(this, EventArgs.Empty);
+
+
+            TreeNode node;
+
+
+
+            for (int i1 = 0,i=0 ; i1 < Name_Notee_element_List_Tree.Count; i1++)
+            {
+                //.Find(Name_Notee_element_List_Tree[i1], true);
+                TreeNodeCollection findTreeNodes = treeViewPath1.Nodes;
+                TreeNode[] node1 = findTreeNodes.Find(Name_Notee_element_List_Tree[i1], false);
+                node1[0].Nodes.Clear();
+               //TreeNode[] findTreeNodes = treeViewPath1.Nodes.Find(Name_Notee_element_List_Tree[i1], false);
+
+                // findTreeNodes[0].Nodes.Clear();
+
+                for (; i < name_Notee_List.Count; i++)
+                {
+                    node = node1[0].Nodes.Add(name_Notee_List[i]);
+                    node.Name = name_Notee_List[i];
+
+                    if (name_Notee_element_List[i] > 0)
+                        node.Nodes.Add("1");
+                }
+                ///////////////////
+                //тут нужено добавление
+                //////////
+            }
 
         }
 
@@ -236,11 +274,12 @@ namespace Conductor
                 if (name_Notee_element_List[i] > 0)
                     node.Nodes.Add("1");
             }
-
+            
 
         }
         private void treeViewPath1_AfterCollapse(object sender, TreeViewEventArgs e)
         {
+          
             bool i = false;
             if (e.Node.Nodes.Count > 0)
                 i = !i;
@@ -261,6 +300,12 @@ namespace Conductor
 
         private void treeViewPath1_AfterSelect(object sender, TreeViewEventArgs e)
         {
+           
+            if (start)
+            {
+                start = !start;
+                return;
+            }
             try
             {
                 Full_Path_Note = e.Node.FullPath;
@@ -287,7 +332,8 @@ namespace Conductor
             }
             catch (Exception ex) {
              
-                    MessageBox.Show(ex.Message); }
+                    MessageBox.Show(ex.Message);
+            }
         }
 
         private void toolStripSplitButtonTabl_ButtonClick(object sender, EventArgs e)
