@@ -19,11 +19,13 @@ namespace Conductor
         event EventHandler<EventArgs> Move_;
         event EventHandler<EventArgs> Start_program;
         event EventHandler<EventArgs> Renewal;
+        event EventHandler<EventArgs> ViweItem;
 
         string Name_Note { set; get; }
         string Full_Path_Note { set; get; }
         
         string[] str { set; get; }
+        string NameItem { set; get; }
         List<string> Full_Path_Note_List { set; get; }
         List<int> Name_Notee_element_List { set; get; }
         List<string> Name_Notee_List { set; get; }

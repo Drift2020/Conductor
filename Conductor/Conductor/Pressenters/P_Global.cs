@@ -27,11 +27,13 @@ namespace Conductor
             _viwe.Start_program += new EventHandler<EventArgs>(Start_program);
             _viwe.Renewal += new EventHandler<EventArgs>(Renewal);
             _viwe.Remove_Die_Path += new EventHandler<EventArgs>(Remove_Die_Path);
+            _viwe.ViweItem += new EventHandler<EventArgs>(ViweItem);
         }
         public void Remove_Die_Path(object sender, EventArgs e)
         {
             model.Dell_Histori_element(model.Now_Histori());
         }
+
         public void Close_Program(object sender, EventArgs e)
         {
 
@@ -39,6 +41,10 @@ namespace Conductor
         public void Close_Tree(object sender, EventArgs e)
         {
             model.Dell_Tree(_viwe.Full_Path_Note);
+        }
+        public void ViweItem(object sender, EventArgs e)
+        {
+
         }
         public void Open_Tree(object sender, EventArgs e)
         {
@@ -93,7 +99,7 @@ namespace Conductor
         {
 
             string _temp;
-            string temp = _temp = model.Back_Histori();
+            string temp = _temp = model.Now_Histori();
             string[] str1;
             string[] str2;
             if ("none" != temp)
@@ -247,6 +253,7 @@ namespace Conductor
 
         public void Renewal(object sender, EventArgs e)
         {
+           
             for (string s = model.Move_Tree(); s != "none"; s = model.Move_Tree())
             {
                 _viwe.Name_Notee_element_List_Tree.Add(s);
@@ -276,7 +283,23 @@ namespace Conductor
                 }
             }
 
-           
+            string temp = model.Now_Histori().Replace("\\\\", "\\");
+            string[] str1, str3;
+            if (temp == "g")
+            {
+                str1 = Directory.GetLogicalDrives();
+            }
+            else
+            {
+                str1 = Directory.GetDirectories(@"" + temp, "*.*");
+                str3 = Directory.GetFiles(@"" + temp, "*.*");
+
+                int length = str1.Length;
+
+                Array.Resize(ref str1, str1.Length + str3.Length);
+                Array.Copy(str3, 0, str1, length, str3.Length);
+            }
+            _viwe.str = str1;
 
 
 

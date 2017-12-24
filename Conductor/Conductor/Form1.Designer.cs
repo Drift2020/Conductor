@@ -151,28 +151,28 @@
             this.ToolStripMenuItem1.Name = "ToolStripMenuItem1";
             this.ToolStripMenuItem1.Size = new System.Drawing.Size(166, 22);
             this.ToolStripMenuItem1.Text = "Список";
-            this.ToolStripMenuItem1.Click += new System.EventHandler(this.ToolStripMenuItem1_Click);
+            this.ToolStripMenuItem1.Click += new System.EventHandler(this.ToolStripMenuItem_Click);
             // 
             // ToolStripMenuItem2
             // 
             this.ToolStripMenuItem2.Name = "ToolStripMenuItem2";
             this.ToolStripMenuItem2.Size = new System.Drawing.Size(166, 22);
             this.ToolStripMenuItem2.Text = "Таблица";
-            this.ToolStripMenuItem2.Click += new System.EventHandler(this.таблицыToolStripMenuItem_Click);
+            this.ToolStripMenuItem2.Click += new System.EventHandler(this.ToolStripMenuItem_Click);
             // 
             // ToolStripMenuItem3
             // 
             this.ToolStripMenuItem3.Name = "ToolStripMenuItem3";
             this.ToolStripMenuItem3.Size = new System.Drawing.Size(166, 22);
             this.ToolStripMenuItem3.Text = "Плитка";
-            this.ToolStripMenuItem3.Click += new System.EventHandler(this.ToolStripMenuItem3_Click);
+            this.ToolStripMenuItem3.Click += new System.EventHandler(this.ToolStripMenuItem_Click);
             // 
             // ToolStripMenuItem4
             // 
             this.ToolStripMenuItem4.Name = "ToolStripMenuItem4";
             this.ToolStripMenuItem4.Size = new System.Drawing.Size(166, 22);
             this.ToolStripMenuItem4.Text = "Большие значки";
-            this.ToolStripMenuItem4.Click += new System.EventHandler(this.ToolStripMenuItem4_Click);
+            this.ToolStripMenuItem4.Click += new System.EventHandler(this.ToolStripMenuItem_Click);
             // 
             // listViewFolder1
             // 

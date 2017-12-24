@@ -25,6 +25,8 @@ namespace Conductor
         public event EventHandler<EventArgs> Move_;
         public event EventHandler<EventArgs> Start_program;
         public event EventHandler<EventArgs> Renewal;
+        public event EventHandler<EventArgs> ViweItem;
+
         #region Pole
 
         // 1 element , 2 name, 3 full path, 4 elements element's, 5 name, 6 full path
@@ -35,12 +37,12 @@ namespace Conductor
         List<string> full_Path_Note_List = new List<string>();
         List<string> name_Notee_element_List_Tree = new List<string>();
         List<string> name_Notee_List = new List<string>();
-
+        ToolStripMenuItem tempMenuItem = null;
         public string[] str { set; get; }
         public string Name_Note { set; get; }
         public string Full_Path_Note { set; get; }
-        
 
+        public string NameItem { set; get; }
         public List<string> Full_Path_Note_List { set { full_Path_Note_List = value; } get { return full_Path_Note_List; } }
         public List<string> Name_Notee_List { set { name_Notee_List = value; } get { return name_Notee_List; } }
         public List<int> Name_Notee_element_List { set { name_Notee_element_List = value; } get { return name_Notee_element_List; } }
@@ -85,7 +87,7 @@ namespace Conductor
             list.TransparentColor = Color.Transparent;
 
             listViewFolder1.LargeImageList = list;
-           
+            ToolStripMenuItem3.Checked = true;
             //for (int x = 0; x < 3; ++x)
             //{
             //    // Добавляем корневой узел
@@ -99,10 +101,7 @@ namespace Conductor
         }
 
         #region Button
-        private void таблицыToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-
-        }
+       
 
         private void toolStripButtonEnd_Click(object sender, EventArgs e)
         {
@@ -203,7 +202,7 @@ namespace Conductor
             Name_Notee_List.Clear();
             Full_Path_Note_List.Clear();
             Name_Notee_element_List.Clear();
-
+            Name_Notee_element_List_Tree.Clear();
 
             Renewal?.Invoke(this, EventArgs.Empty);
 
@@ -212,7 +211,7 @@ namespace Conductor
 
 
 
-            for (int i1 = 0,i=0 ; i1 < Name_Notee_element_List_Tree.Count; i1++)
+            for (int i1 = 0 ; i1 < Name_Notee_element_List_Tree.Count; i1++)
             {
                 //.Find(Name_Notee_element_List_Tree[i1], true);
                 TreeNodeCollection findTreeNodes = treeViewPath1.Nodes;
@@ -222,35 +221,68 @@ namespace Conductor
 
                 // findTreeNodes[0].Nodes.Clear();
 
-                for (; i < name_Notee_List.Count; i++)
+                for (int i = 0; i < name_Notee_List.Count; i++)
                 {
-                    node = node1[0].Nodes.Add(name_Notee_List[i]);
-                    node.Name = name_Notee_List[i];
+                    if (Full_Path_Note_List[i].Contains(Name_Notee_element_List_Tree[i1]))
+                    {
+                        node = node1[0].Nodes.Add(name_Notee_List[i]);
+                        node.Name = name_Notee_List[i];
 
-                    if (name_Notee_element_List[i] > 0)
-                        node.Nodes.Add("1");
+                        if (name_Notee_element_List[i] > 0)
+                            node.Nodes.Add("1");
+                    }
                 }
                 ///////////////////
                 //тут нужено добавление
                 //////////
             }
 
+            try
+            {                             
+
+                list.Images.Clear();
+                listViewFolder1.Clear();
+
+                Win32.SHFILEINFO sh = new Win32.SHFILEINFO();
+                if (str.Length == 0)
+                {
+                    return;
+                }
+
+                for (int i = 0; i < str.Length; i++)
+                {
+                    Win32.SHGetFileInfo(str[i], 0, ref sh, (uint)Marshal.SizeOf(sh),
+                        Win32.SHGFI_ICON | Win32.SHGFI_LARGEICON | Win32.SHGFI_DISPLAYNAME);
+                    Icon icon = Icon.FromHandle(sh.hIcon);
+                    list.Images.Add(icon);
+                    listViewFolder1.Items.Add(sh.szDisplayName, i);
+                }
+            }
+            catch (Exception ex)
+            {
+
+                MessageBox.Show(ex.Message);
+            }
+
         }
 
-        private void ToolStripMenuItem1_Click(object sender, EventArgs e)
+    
+        private void ToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            ToolStripMenuItem nowItem = sender as ToolStripMenuItem;
+            if (tempMenuItem != null)
+                tempMenuItem.Checked = false;
+
+            nowItem.Checked = true;
+            NameItem = nowItem.Name;
+            ViweItem?.Invoke(this, EventArgs.Empty);
+
+
+
+            tempMenuItem = nowItem;
 
         }
-
-        private void ToolStripMenuItem3_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void ToolStripMenuItem4_Click(object sender, EventArgs e)
-        {
-
-        }
+     
         #endregion Button
 
         private void treeViewPath1_BeforeExpand(object sender, TreeViewCancelEventArgs e)
@@ -344,5 +376,7 @@ namespace Conductor
             }
             catch (Exception ex) { Remove_Die_Path?.Invoke(this, EventArgs.Empty); MessageBox.Show(ex.Message); }
         }
+
+       
     }
 }
