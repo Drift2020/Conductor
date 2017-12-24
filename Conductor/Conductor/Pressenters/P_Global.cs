@@ -9,6 +9,7 @@ namespace Conductor
 {
     class P_Global
     {
+        
         private readonly I_Global _viwe;
         private readonly Histori model;
         //  private readonly 
@@ -44,7 +45,22 @@ namespace Conductor
         }
         public void ViweItem(object sender, EventArgs e)
         {
+            if(_viwe.NameItem== "ToolStripMenuItem1")
+            {
 
+            }
+            else if(_viwe.NameItem == "ToolStripMenuItem2")
+            {
+
+            }
+            else if (_viwe.NameItem == "ToolStripMenuItem3")
+            {
+
+            }
+            else if (_viwe.NameItem == "ToolStripMenuItem4")
+            {
+
+            }
         }
         public void Open_Tree(object sender, EventArgs e)
         {

@@ -37,6 +37,10 @@ namespace Conductor
         List<string> full_Path_Note_List = new List<string>();
         List<string> name_Notee_element_List_Tree = new List<string>();
         List<string> name_Notee_List = new List<string>();
+        List<string> date_Edit_element_List = new List<string>();
+        List<string> size_element_List = new List<string>();
+        List<string> type_element_List = new List<string>();
+
         ToolStripMenuItem tempMenuItem = null;
         public string[] str { set; get; }
         public string Name_Note { set; get; }
@@ -47,6 +51,9 @@ namespace Conductor
         public List<string> Name_Notee_List { set { name_Notee_List = value; } get { return name_Notee_List; } }
         public List<int> Name_Notee_element_List { set { name_Notee_element_List = value; } get { return name_Notee_element_List; } }
         public List<string> Name_Notee_element_List_Tree { set { name_Notee_element_List_Tree = value; } get { return name_Notee_element_List_Tree; } }
+        public List<string> Date_Edit_element_List { set { date_Edit_element_List = value; } get { return date_Edit_element_List; } }
+        public List<string> Size_element_List { set { size_element_List = value; } get { return size_element_List; } }
+        public List<string> Type_element_List { set { type_element_List = value; } get { return type_element_List; } }
         #endregion Pole
         private void Form1_Load(object sender, EventArgs e)
         {
@@ -277,6 +284,22 @@ namespace Conductor
             NameItem = nowItem.Name;
             ViweItem?.Invoke(this, EventArgs.Empty);
 
+            if (NameItem == "ToolStripMenuItem1")
+            {
+                listViewFolder1.View = View.List;
+            }
+            else if (NameItem == "ToolStripMenuItem2")
+            {
+                listViewFolder1.View = View.Details;
+            }
+            else if (NameItem == "ToolStripMenuItem3")
+            {
+                listViewFolder1.View = View.Tile;
+            }
+            else if (NameItem == "ToolStripMenuItem4")
+            {
+                listViewFolder1.View = View.LargeIcon;
+            }
 
 
             tempMenuItem = nowItem;
@@ -340,6 +363,10 @@ namespace Conductor
             }
             try
             {
+                date_Edit_element_List.Clear();
+                size_element_List.Clear();
+                type_element_List.Clear();
+
                 Full_Path_Note = e.Node.FullPath;
 
                 Open_Folder_in_Tree?.Invoke(this, EventArgs.Empty);

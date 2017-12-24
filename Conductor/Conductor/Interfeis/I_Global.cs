@@ -27,6 +27,11 @@ namespace Conductor
         string[] str { set; get; }
         string NameItem { set; get; }
         List<string> Full_Path_Note_List { set; get; }
+
+        List<string> Date_Edit_element_List { set; get; }
+        List<string> Size_element_List { set; get; }
+        List<string> Type_element_List { set; get; }
+
         List<int> Name_Notee_element_List { set; get; }
         List<string> Name_Notee_List { set; get; }
         List<string> Name_Notee_element_List_Tree { set; get; }
