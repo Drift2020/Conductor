@@ -9,7 +9,7 @@ namespace Conductor
 {
     class P_Global
     {
-        
+         FileInfo fi;
         private readonly I_Global _viwe;
         private readonly Histori model;
         //  private readonly 
@@ -51,6 +51,10 @@ namespace Conductor
             }
             else if(_viwe.NameItem == "ToolStripMenuItem2")
             {
+                //
+
+
+
 
             }
             else if (_viwe.NameItem == "ToolStripMenuItem3")
@@ -64,8 +68,8 @@ namespace Conductor
         }
         public void Open_Tree(object sender, EventArgs e)
         {
-            string[] str = System.IO.Directory.GetDirectories((@"" + _viwe.Full_Path_Note), "*.*");
-            FileInfo fi;
+            string[] str = Directory.GetDirectories((@"" + _viwe.Full_Path_Note), "*.*");
+          
 
             model.Add_Tree(_viwe.Full_Path_Note);
             
@@ -75,7 +79,7 @@ namespace Conductor
                 try
                 {
                     fi = new FileInfo(str[i]);
-                    string[] str2 = System.IO.Directory.GetDirectories((@"" + fi.FullName), "*.*");
+                    string[] str2 = Directory.GetDirectories((@"" + fi.FullName), "*.*");
                     _viwe.Name_Notee_List.Add(fi.Name);
                     _viwe.Full_Path_Note_List.Add(fi.FullName);
 
@@ -95,6 +99,7 @@ namespace Conductor
 
         public void Open_Folder_in_Tree(object sender, EventArgs e)
         {
+            
             model.Add_Histori(_viwe.Full_Path_Note.Replace("\\\\", "\\"));
 
             string temp = _viwe.Full_Path_Note.Replace("\\\\", "\\");
@@ -103,6 +108,22 @@ namespace Conductor
             int length = str1.Length;
             Array.Resize(ref str1, str1.Length + str2.Length);
             Array.Copy(str2, 0, str1, length, str2.Length);
+
+
+            for(int i=0;i< str1.Length;i++)
+            {
+                try { 
+                fi = new FileInfo(str1[i]);
+                _viwe.Date_Edit_element_List.Add(fi.LastWriteTimeUtc.ToString());
+               // _viwe.Size_element_List.Add(fi.Length.ToString());
+                _viwe.Type_element_List.Add(fi.Extension.ToString());
+            }
+                    catch
+            {
+                    _viwe.Date_Edit_element_List.Add("");
+                    _viwe.Type_element_List.Add("");
+                }
+        }
             _viwe.str = str1;
 
         }
@@ -111,6 +132,25 @@ namespace Conductor
 
         }
         //g - LogicalDrives
+
+        private void Info(string[] str1)
+        {
+            for (int i = 0; i < str1.Length; i++)
+            {
+                try
+                {
+                    fi = new FileInfo(str1[i]);
+                    _viwe.Date_Edit_element_List.Add(fi.LastWriteTimeUtc.ToString());
+                    //_viwe.Size_element_List.Add(fi.Length.ToString());
+                    _viwe.Type_element_List.Add(Path.GetExtension(str1[i]));
+                }
+                catch
+                {
+                    _viwe.Date_Edit_element_List.Add("");
+                    _viwe.Type_element_List.Add("");
+                }
+            }
+        }
         public void Up(object sender, EventArgs e)
         {
 
@@ -155,7 +195,10 @@ namespace Conductor
 
                     Array.Resize(ref str1, str1.Length + str2.Length);
                     Array.Copy(str2, 0, str1, length, str2.Length);
+
                 }
+                Info(str1);
+
                 ////// ////// ////// ////// ////// ////// ////// //////
                 _viwe.str = str1;
                 model.Add_Histori(temp);
@@ -191,7 +234,10 @@ namespace Conductor
 
                     Array.Resize(ref str1, str1.Length + str2.Length);
                     Array.Copy(str2, 0, str1, length, str2.Length);
+
+                  
                 }
+                Info(str1);
                 _viwe.str = str1;
                
             }
@@ -225,6 +271,7 @@ namespace Conductor
                     Array.Resize(ref str1, str1.Length + str2.Length);
                     Array.Copy(str2, 0, str1, length, str2.Length);
                 }
+                Info(str1);
                 _viwe.str = str1;
             }
             else
@@ -238,9 +285,15 @@ namespace Conductor
             int length = str1.Length;
             _viwe.str = str1;
 
-            ////////////////////////////////////
 
-            string[] astrLogicalDrives = System.IO.Directory.GetLogicalDrives(); // System.Environment.GetLogicalDrives();    
+
+
+            ////////////////////////////////////
+          
+
+
+
+                string[] astrLogicalDrives = System.IO.Directory.GetLogicalDrives(); // System.Environment.GetLogicalDrives();    
 
             foreach (string disk in astrLogicalDrives)
                 _viwe.Name_Notee_List.Add(disk);
@@ -262,10 +315,11 @@ namespace Conductor
                     _viwe.Name_Notee_element_List.Add(0);
                 }
             }
+            Info(str1);
+
             model.Add_Histori("g");
         }
-        ////  foreach (string disk in astrLogicalDrives)
-        ////    node = treeViewPath1.Nodes.Add(disk);        
+      
 
         public void Renewal(object sender, EventArgs e)
         {

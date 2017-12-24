@@ -31,7 +31,7 @@ namespace Conductor
 
         // 1 element , 2 name, 3 full path, 4 elements element's, 5 name, 6 full path
         ImageList list = new ImageList();
-        
+        Size start_point,smal_size,big_size;
         bool start = true;
         List<int> name_Notee_element_List = new List<int>();
         List<string> full_Path_Note_List = new List<string>();
@@ -65,46 +65,31 @@ namespace Conductor
             for (int disk = 0; disk < name_Notee_List.Count; disk++)
             {
                 node = treeViewPath1.Nodes.Add(name_Notee_List[disk]);
+
+
                 node.Name = name_Notee_List[disk];
                 if (name_Notee_element_List[disk] > 0)
                     node.Nodes.Add("1");
             }
 
 
-            Win32.SHFILEINFO sh = new Win32.SHFILEINFO();
-            if (str.Length == 0)
-            {
-                return;
-            }
-
-            for (int i = 0; i < str.Length; i++)
-            {
-                Win32.SHGetFileInfo(str[i], 0, ref sh, (uint)Marshal.SizeOf(sh),
-                    Win32.SHGFI_ICON | Win32.SHGFI_LARGEICON | Win32.SHGFI_DISPLAYNAME);
-                System.Drawing.Icon icon = Icon.FromHandle(sh.hIcon);
-                list.Images.Add(icon);
-                listViewFolder1.Items.Add(sh.szDisplayName, i);
-            }
+            DravItem();
         }
         public Form1()
         {
+            smal_size = new Size(18, 18);
+            big_size = new Size(48, 48);
+            start_point = new Size(32, 32);
             InitializeComponent();
             list.ColorDepth = ColorDepth.Depth32Bit;
-            list.ImageSize = new Size(32, 32);
+            list.ImageSize = start_point;
             list.TransparentColor = Color.Transparent;
-
+            listViewFolder1.FullRowSelect = true;
             listViewFolder1.LargeImageList = list;
+            listViewFolder1.SmallImageList = list;
             ToolStripMenuItem3.Checked = true;
-            //for (int x = 0; x < 3; ++x)
-            //{
-            //    // Добавляем корневой узел
-            //    node = treeViewPath1.Nodes.Add(String.Format("Node{0}", x * 4));
-            //    for (int y = 1; y < 4; ++y)
-            //    {
-            //        // Добавляем дочерние узлы 
-            //        node = node.Nodes.Add(String.Format("Node{0}", x * 4 + y));
-            //    }
-            //}
+            NameItem = "ToolStripMenuItem3";
+            tempMenuItem = ToolStripMenuItem3;
         }
 
         #region Button
@@ -273,7 +258,85 @@ namespace Conductor
 
         }
 
-    
+        private void DravItem()
+        {
+            list.Images.Clear();
+            listViewFolder1.Clear();
+
+            Win32.SHFILEINFO sh = new Win32.SHFILEINFO();
+            if (str.Length == 0)
+            {
+                return;
+            }         
+
+            if (NameItem == "ToolStripMenuItem1")
+            {
+                listViewFolder1.View = View.List;
+                list.ImageSize = smal_size;
+                for (int i = 0; i < str.Length; i++)
+                {
+                    Win32.SHGetFileInfo(str[i], 0, ref sh, (uint)Marshal.SizeOf(sh),
+                     Win32.SHGFI_ICON | Win32.SHGFI_LARGEICON | Win32.SHGFI_DISPLAYNAME);
+                    Icon icon = Icon.FromHandle(sh.hIcon);
+                    list.Images.Add(icon);
+                    listViewFolder1.Items.Add(sh.szDisplayName, i);
+                }
+            }
+            else if (NameItem == "ToolStripMenuItem2")
+            {
+               // list.ImageSize = new Size(30, 30);
+
+                listViewFolder1.View = View.Details;
+
+
+
+                listViewFolder1.Columns.Add("Имя", 100, HorizontalAlignment.Left);
+                listViewFolder1.Columns.Add("Дата изменения", 60, HorizontalAlignment.Left);
+                listViewFolder1.Columns.Add("Тип", 60, HorizontalAlignment.Left);
+                listViewFolder1.Columns.Add("Размер", 60, HorizontalAlignment.Center);
+                list.ImageSize = smal_size;
+                for (int i = 0; i < str.Length; i++)
+                {
+                    Win32.SHGetFileInfo(str[i], 0, ref sh, (uint)Marshal.SizeOf(sh),
+                     Win32.SHGFI_ICON | Win32.SHGFI_SMALLICON | Win32.SHGFI_DISPLAYNAME);
+                    Icon icon = Icon.FromHandle(sh.hIcon);
+                    list.Images.Add(icon);
+                  
+
+                    ListViewItem temp = listViewFolder1.Items.Add(sh.szDisplayName, i);
+                    temp.SubItems.Add(date_Edit_element_List[i]);
+                    temp.SubItems.Add(type_element_List[i]);
+                   // temp.SubItems.Add(size_element_List[i]);
+                }
+
+            }
+            else if (NameItem == "ToolStripMenuItem3")
+            {
+                listViewFolder1.View = View.Tile;
+                list.ImageSize = start_point;
+                for (int i = 0; i < str.Length; i++)
+                {
+                    Win32.SHGetFileInfo(str[i], 0, ref sh, (uint)Marshal.SizeOf(sh),
+                     Win32.SHGFI_ICON | Win32.SHGFI_LARGEICON | Win32.SHGFI_DISPLAYNAME);
+                    Icon icon = Icon.FromHandle(sh.hIcon);
+                    list.Images.Add(icon);
+                    listViewFolder1.Items.Add(sh.szDisplayName, i);
+                }
+            }
+            else if (NameItem == "ToolStripMenuItem4")
+            {
+                listViewFolder1.View = View.LargeIcon;
+                list.ImageSize = big_size;
+                for (int i = 0; i < str.Length; i++)
+                {
+                    Win32.SHGetFileInfo(str[i], 0, ref sh, (uint)Marshal.SizeOf(sh),
+                     Win32.SHGFI_ICON | Win32.SHGFI_LARGEICON | Win32.SHGFI_DISPLAYNAME);
+                    Icon icon = Icon.FromHandle(sh.hIcon);
+                    list.Images.Add(icon);
+                    listViewFolder1.Items.Add(sh.szDisplayName, i);
+                }
+            }
+        }
         private void ToolStripMenuItem_Click(object sender, EventArgs e)
         {
             ToolStripMenuItem nowItem = sender as ToolStripMenuItem;
@@ -284,22 +347,7 @@ namespace Conductor
             NameItem = nowItem.Name;
             ViweItem?.Invoke(this, EventArgs.Empty);
 
-            if (NameItem == "ToolStripMenuItem1")
-            {
-                listViewFolder1.View = View.List;
-            }
-            else if (NameItem == "ToolStripMenuItem2")
-            {
-                listViewFolder1.View = View.Details;
-            }
-            else if (NameItem == "ToolStripMenuItem3")
-            {
-                listViewFolder1.View = View.Tile;
-            }
-            else if (NameItem == "ToolStripMenuItem4")
-            {
-                listViewFolder1.View = View.LargeIcon;
-            }
+            DravItem();
 
 
             tempMenuItem = nowItem;
@@ -371,23 +419,9 @@ namespace Conductor
 
                 Open_Folder_in_Tree?.Invoke(this, EventArgs.Empty);
 
-                list.Images.Clear();
-                listViewFolder1.Clear();
-
-                Win32.SHFILEINFO sh = new Win32.SHFILEINFO();
-                if (str.Length == 0)
-                {
-                    return;
-                }
-
-                for (int i = 0; i < str.Length; i++)
-                {
-                    Win32.SHGetFileInfo(str[i], 0, ref sh, (uint)Marshal.SizeOf(sh),
-                        Win32.SHGFI_ICON | Win32.SHGFI_LARGEICON | Win32.SHGFI_DISPLAYNAME);
-                    Icon icon = Icon.FromHandle(sh.hIcon);
-                    list.Images.Add(icon);
-                    listViewFolder1.Items.Add(sh.szDisplayName, i);
-                }
+              
+                DravItem();
+                
             }
             catch (Exception ex) {
              
