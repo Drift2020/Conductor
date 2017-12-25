@@ -110,20 +110,7 @@ namespace Conductor
             Array.Copy(str2, 0, str1, length, str2.Length);
 
 
-            for(int i=0;i< str1.Length;i++)
-            {
-                try { 
-                fi = new FileInfo(str1[i]);
-                _viwe.Date_Edit_element_List.Add(fi.LastWriteTimeUtc.ToString());
-               // _viwe.Size_element_List.Add(fi.Length.ToString());
-                _viwe.Type_element_List.Add(fi.Extension.ToString());
-            }
-                    catch
-            {
-                    _viwe.Date_Edit_element_List.Add("");
-                    _viwe.Type_element_List.Add("");
-                }
-        }
+            Info(str1);
             _viwe.str = str1;
 
         }
@@ -137,17 +124,31 @@ namespace Conductor
         {
             for (int i = 0; i < str1.Length; i++)
             {
+                fi = new FileInfo(str1[i]);
                 try
                 {
-                    fi = new FileInfo(str1[i]);
-                    _viwe.Date_Edit_element_List.Add(fi.LastWriteTimeUtc.ToString());
-                    //_viwe.Size_element_List.Add(fi.Length.ToString());
-                    _viwe.Type_element_List.Add(Path.GetExtension(str1[i]));
+                  
+                    _viwe.Date_Edit_element_List.Add(fi.LastWriteTimeUtc.ToString());                                     
                 }
                 catch
                 {
-                    _viwe.Date_Edit_element_List.Add("");
-                    _viwe.Type_element_List.Add("");
+                    _viwe.Date_Edit_element_List.Add("");                   
+                }
+                try
+                {                 
+                    _viwe.Type_element_List.Add(File.GetAttributes(str1[i]).ToString());                   
+                }
+                catch
+                {                
+                    _viwe.Type_element_List.Add("");                  
+                }
+                try
+                {
+                    _viwe.Size_element_List.Add(fi.Length.ToString());
+                }
+                catch
+                {               
+                    _viwe.Size_element_List.Add("none");
                 }
             }
         }

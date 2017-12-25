@@ -103,24 +103,8 @@ namespace Conductor
 
                 if (str != null)
                 {
-                 
-                    list.Images.Clear();
-                    listViewFolder1.Clear();
 
-                    Win32.SHFILEINFO sh = new Win32.SHFILEINFO();
-                    if (str.Length == 0)
-                    {
-                        return;
-                    }
-
-                    for (int i = 0; i < str.Length; i++)
-                    {
-                        Win32.SHGetFileInfo(str[i], 0, ref sh, (uint)Marshal.SizeOf(sh),
-                            Win32.SHGFI_ICON | Win32.SHGFI_LARGEICON | Win32.SHGFI_DISPLAYNAME);
-                        Icon icon = Icon.FromHandle(sh.hIcon);
-                        list.Images.Add(icon);
-                        listViewFolder1.Items.Add(sh.szDisplayName, i);
-                    }
+                    DravItem();
                 }             
             }
             catch (Exception ex) { Remove_Die_Path?.Invoke(this, EventArgs.Empty);
@@ -136,23 +120,7 @@ namespace Conductor
                 if (str != null)
                 {
 
-                    list.Images.Clear();
-                    listViewFolder1.Clear();
-
-                    Win32.SHFILEINFO sh = new Win32.SHFILEINFO();
-                    if (str.Length == 0)
-                    {
-                        return;
-                    }
-
-                    for (int i = 0; i < str.Length; i++)
-                    {
-                        Win32.SHGetFileInfo(str[i], 0, ref sh, (uint)Marshal.SizeOf(sh),
-                            Win32.SHGFI_ICON | Win32.SHGFI_LARGEICON | Win32.SHGFI_DISPLAYNAME);
-                        Icon icon = Icon.FromHandle(sh.hIcon);
-                        list.Images.Add(icon);
-                        listViewFolder1.Items.Add(sh.szDisplayName, i);
-                    }
+                    DravItem();
                 }
             }
             catch (Exception ex) { Remove_Die_Path?.Invoke(this, EventArgs.Empty); MessageBox.Show(ex.Message); }
@@ -167,23 +135,7 @@ namespace Conductor
                 if (str != null)
                 {
 
-                    list.Images.Clear();
-                    listViewFolder1.Clear();
-
-                    Win32.SHFILEINFO sh = new Win32.SHFILEINFO();
-                    if (str.Length == 0)
-                    {
-                        return;
-                    }
-
-                    for (int i = 0; i < str.Length; i++)
-                    {
-                        Win32.SHGetFileInfo(str[i], 0, ref sh, (uint)Marshal.SizeOf(sh),
-                            Win32.SHGFI_ICON | Win32.SHGFI_LARGEICON | Win32.SHGFI_DISPLAYNAME);
-                        Icon icon = Icon.FromHandle(sh.hIcon);
-                        list.Images.Add(icon);
-                        listViewFolder1.Items.Add(sh.szDisplayName, i);
-                    }
+                    DravItem();
                 }
             }
             catch (Exception ex) { Remove_Die_Path?.Invoke(this, EventArgs.Empty); MessageBox.Show(ex.Message); }
@@ -230,25 +182,8 @@ namespace Conductor
             }
 
             try
-            {                             
-
-                list.Images.Clear();
-                listViewFolder1.Clear();
-
-                Win32.SHFILEINFO sh = new Win32.SHFILEINFO();
-                if (str.Length == 0)
-                {
-                    return;
-                }
-
-                for (int i = 0; i < str.Length; i++)
-                {
-                    Win32.SHGetFileInfo(str[i], 0, ref sh, (uint)Marshal.SizeOf(sh),
-                        Win32.SHGFI_ICON | Win32.SHGFI_LARGEICON | Win32.SHGFI_DISPLAYNAME);
-                    Icon icon = Icon.FromHandle(sh.hIcon);
-                    list.Images.Add(icon);
-                    listViewFolder1.Items.Add(sh.szDisplayName, i);
-                }
+            {
+                DravItem();
             }
             catch (Exception ex)
             {
@@ -284,7 +219,7 @@ namespace Conductor
             }
             else if (NameItem == "ToolStripMenuItem2")
             {
-               // list.ImageSize = new Size(30, 30);
+             
 
                 listViewFolder1.View = View.Details;
 
@@ -306,7 +241,7 @@ namespace Conductor
                     ListViewItem temp = listViewFolder1.Items.Add(sh.szDisplayName, i);
                     temp.SubItems.Add(date_Edit_element_List[i]);
                     temp.SubItems.Add(type_element_List[i]);
-                   // temp.SubItems.Add(size_element_List[i]);
+                    temp.SubItems.Add(size_element_List[i]);
                 }
 
             }
